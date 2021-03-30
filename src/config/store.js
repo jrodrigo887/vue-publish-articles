@@ -19,9 +19,6 @@ export default new vuex.Store({
             } else {
                 state.isMenuVisible = isVisible
             }
-
-            console.log("States " + state.isMenuVisible);
-
         }
     }
 })
