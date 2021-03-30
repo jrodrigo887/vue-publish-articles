@@ -8,7 +8,7 @@
             <i class="fa fa-angle-down"></i>
         </div>
         <div class="user-dropdown-content">
-            <a href="#"> <i class="fa fa-cogs"></i>Administrador</a>
+            <a @click="navigateAdmin"> <i class="fa fa-cogs"></i>Administrador</a>
             <a href="#"> <i class="fa fa-sign-out"></i>Sair</a>
         </div>
     </div>
@@ -22,7 +22,12 @@ export default {
     components: {
         Gravatar
     },
-    computed: mapState(['user'])
+    computed: mapState(['user']),
+    methods: {
+        navigateAdmin() {
+            this.$router.push({name: 'adminPages'})
+        }
+    }
 
 }
 </script>
@@ -89,6 +94,7 @@ export default {
     text-decoration-style: none;
     color: #000;
     background-color: #ededed;
+    cursor: pointer;
 }
 
 .user-dropdown:hover .user-dropdown-content {

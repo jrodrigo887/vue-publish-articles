@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <h1>Texto central</h1>
+        <router-view></router-view>
     </div>
   
 </template>

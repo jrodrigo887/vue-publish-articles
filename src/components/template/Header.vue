@@ -6,7 +6,9 @@
 		</a>
 
 		<h1 class="title">
+            <router-link to="/" tag="a">
 			{{ title }}
+            </router-link>
 		</h1>
 
         <user-drop-down v-if="!hiddenUserDropdown" class="user-dropdown"/>
@@ -59,6 +61,11 @@ export default {
 }
 
 .title a {
+    color: white;
+    text-decoration: none; 
+}
+
+.title a:hover {
     color: white;
     text-decoration: none; 
 }
