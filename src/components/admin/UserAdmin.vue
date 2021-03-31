@@ -2,9 +2,9 @@
 	<div class="user-admin">
 		<b-container fluid>
 			<b-form>
-                <input type="hidden" id="user-id" v-model="user.userId">
+				<input type="hidden" id="user-id" v-model="user.userId" />
 				<b-row>
-					<b-col md='6' sm='12'>
+					<b-col md="6" sm="12">
 						<b-form-group
 							id="input-group-name"
 							label="Nome"
@@ -16,11 +16,12 @@
 								type="text"
 								placeholder="Informe o seu nome."
 								required
+								:readonly="mode === 'remove'"
 							>
 							</b-form-input>
 						</b-form-group>
-					</b-col >
-					<b-col  md='6' sm='12'>
+					</b-col>
+					<b-col md="6" sm="12">
 						<b-form-group
 							id="input-group-email"
 							label="Email"
@@ -32,6 +33,7 @@
 								type="text"
 								placeholder="Informe o seu email."
 								required
+								:readonly="mode === 'remove'"
 							>
 							</b-form-input>
 						</b-form-group>
@@ -43,20 +45,19 @@
 							id="input-group-tipo"
 							label="Tipo usuário"
 							label-for="input-tipo"
-                            
 						>
 							<b-form-radio-group
 								v-model="user.roles"
 								name="radio-inline"
 								:options="tiposUsers"
-								></b-form-radio-group
-							>
+								:disabled="mode === 'remove'"
+							></b-form-radio-group>
 						</b-form-group>
 					</b-col>
 				</b-row>
-                <b-row>
-                    <b-col  md='6' sm='12'>
-                        	<b-form-group
+				<b-row v-show="mode === 'save'">
+					<b-col md="6" sm="12">
+						<b-form-group
 							id="input-group-senha"
 							label="Senha"
 							label-for="input-senha"
@@ -67,43 +68,64 @@
 								type="text"
 								placeholder="Digite uma senha segura"
 								required
+								:readonly="mode === 'remove'"
 							>
 							</b-form-input>
 						</b-form-group>
-
-                    </b-col>
-                     <b-col  md='6' sm='12'>
-                        	<b-form-group
+					</b-col>
+					<b-col md="6" sm="12">
+						<b-form-group
 							id="input-group-confirmSenha"
-							label="Senha"
+							label="Confirmar Senha"
 							label-for="input-confirmSenha"
 						>
 							<b-form-input
 								id="input-confirmSenha"
-								v-model="confirmarSenha"
+								v-model="user.confirmarPassword"
 								type="text"
 								placeholder="Confirme a senha digitada anteriormente."
 								required
+								:readonly="mode === 'remove'"
 							>
 							</b-form-input>
 						</b-form-group>
+					</b-col>
+				</b-row>
+				<b-row class="container">
+					<b-button variant="primary" v-if="mode === 'save'" @click="save"
+						>Salvar</b-button
+					>
 
-                    </b-col>
-                </b-row>
-                <b-button variant="primary" v-if="mode === 'save'"
-                @click="save">Salvar</b-button>
+					<b-button variant="danger" v-if="mode === 'remove'" @click="remove()"
+						>Excluir</b-button
+					>
 
-                <b-button variant="danger" v-if="mode === 'remove'"
-                @click="remove">Excluir</b-button>
-
-                <b-button variant="second" class="ml-2" 
-                @click="cancelar">Cancelar</b-button>
-
+					<b-button variant="second" class="ml-2" @click="cancelar"
+						>Cancelar</b-button
+					>
+				</b-row>
 			</b-form>
-            <hr>
+			<hr />
 		</b-container>
 		<hr />
-		<b-table striped hover :fields="fields" :items="users"></b-table>
+		<!-- Tabela de usuários -->
+		<b-table striped hover :fields="fields" :items="users" align-item="center">
+			<template slot="actions" slot-scope="data">
+				<b-button
+					variant="warning"
+					@click="loadUser(data.item)"
+					class="m-1"
+				>
+					<i class="fa fa-pencil"></i>
+				</b-button>
+				<b-button 
+				variant="danger" 
+				@click="loadUser(data.item, 'remove')"
+				class="m-2">
+					<i class="fa fa-trash"></i>
+				</b-button>
+			</template>
+		</b-table>
 	</div>
 </template>
 
@@ -117,13 +139,12 @@ export default {
 		return {
 			mode: "save",
 			typeUser: "",
-            confirmarSenha: '',
-            tiposUsers: [
-                {text: 'Visitante', value: 'visitante'},
-                {text: 'Funcionário', value: 'funcionario'},
-                {text: 'Gerente', value: 'gerente'},
-                {text: 'Administrador', value: 'administrador'},
-            ],
+			tiposUsers: [
+				{ text: "Visitante", value: "visitante" },
+				{ text: "Funcionário", value: "funcionario" },
+				{ text: "Gerente", value: "gerente" },
+				{ text: "Administrador", value: "administrador" },
+			],
 			user: {},
 			users: [],
 			fields: [
@@ -144,36 +165,42 @@ export default {
 			});
 		},
 
-        reset() {
-            this.mode = 'save',
-            this.user = {},
-            this.loadUsers()
-        },
+		reset() {
+			(this.mode = "save"), (this.user = {}), this.loadUsers();
+		},
 
-        save() {
-            const method = this.user.userId ? 'put' : 'post'
-            const id =  this.user.userId ? `/${this.user.userId}` : ''
-            axios[method](`${baseUrl}/users${id}`, this.user)
-            .then(() => {
-                this.$toasted.global.defaultSuccess()
-                this.reset()
-            })
-            .catch(showError)
-        },
+		save() {
+			const method = this.user.userId ? "put" : "post";
+			const id = this.user.userId ? `/${this.user.userId}` : "";
+			axios[method](`${baseUrl}/users${id}`, this.user)
+				.then(() => {
+					this.$toasted.global.defaultSuccess();
+					this.reset();
+				})
+				.catch(showError);
+		},
 
-        remove() {
-            const id = this.user.userId
-            axios.delete(`/${baseUrl}/users/${id}`)
-            .then(() => {
-                this.$toasted.global.defaultSuccess()
-                this.reset()
-            }).catch(showError)
-        },
+		remove() {
+			const id = this.user.userId;
+			//const url = `https://localhost:5001/api/Users`
+			axios
+				.delete(`${baseUrl}/users/${id}`)
+				.then(() => {
+					this.$toasted.global.defaultSuccess();
+					this.reset();
+				})
+				.catch(showError);
+		},
 
-        cancelar() {
-            this.mode = 'save'
-            this.user = {}
-        }
+		loadUser(user, mode = "save") {
+			this.mode = mode;
+			this.user = { ...user };
+		},
+
+		cancelar() {
+			this.mode = "save";
+			this.user = {};
+		},
 	},
 
 	mounted() {
