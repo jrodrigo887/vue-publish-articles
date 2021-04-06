@@ -1,21 +1,22 @@
 <template>
     <div class="user-dropdown">
         <div class="user-bottom">
-            <span class="d-none d-sm-block">{{ user.name }}</span>
+            <span class="d-none d-sm-block">{{ user.user.name }}</span>
             <div class="user-dropdown-img">
-                <Gravatar  :email="user.email" alt="user" />
+                <Gravatar  :email="user.user.email" alt="user" />
             </div>
             <i class="fa fa-angle-down"></i>
         </div>
         <div class="user-dropdown-content">
-            <a @click="navigateAdmin"> <i class="fa fa-cogs"></i>Administrador</a>
-            <a href="#"> <i class="fa fa-sign-out"></i>Sair</a>
+            <a @click="navigateAdmin" v-if="user.user.roles === 'Administrador'"> <i class="fa fa-cogs"></i>Administrador</a>
+            <a @click.prevent="logout"> <i class="fa fa-sign-out"></i>Sair</a>
         </div>
     </div>
 </template>
 <script>
 import { mapState } from 'vuex'
 import Gravatar from 'vue-gravatar'
+import { userKey } from '../../global'
 
 export default {
     name: 'UserDropDown',
@@ -26,6 +27,12 @@ export default {
     methods: {
         navigateAdmin() {
             this.$router.push({name: 'adminPages'})
+        },
+
+        logout() {
+            localStorage.removeItem(userKey)
+            this.$store.commit('setUser', null)
+            this.$router.push({name: 'auth'})
         }
     }
 

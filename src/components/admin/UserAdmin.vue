@@ -141,8 +141,8 @@ export default {
 			typeUser: "",
 			tiposUsers: [
 				{ text: "Visitante", value: "visitante" },
-				{ text: "Funcionário", value: "funcionario" },
-				{ text: "Gerente", value: "gerente" },
+				//{ text: "Funcionário", value: "funcionario" },
+				//{ text: "Gerente", value: "gerente" },
 				{ text: "Administrador", value: "administrador" },
 			],
 			user: {},

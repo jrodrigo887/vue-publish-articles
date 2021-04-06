@@ -24,7 +24,7 @@
 				</b-row>
 
 				<b-row>
-					<b-col xs="12">
+					<!-- <b-col xs="12">
 						<b-form-group
 							id="input-group-select"
 							label="Categoria Pai"
@@ -37,7 +37,7 @@
 							>
 							</b-form-select>
 						</b-form-group>
-					</b-col>
+					</b-col> -->
 				</b-row>
 
 				<b-row class="container">

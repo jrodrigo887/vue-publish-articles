@@ -4,7 +4,8 @@
 		:hidderToggle="!user" 
 		:hiddenUserDropdown="!user" />
 		<Menu v-if="user" />
-		<Content />
+		<loading v-if="validatingToken"/>
+		<Content v-else />
 		<Footer />
 	</div>
 </template>
@@ -15,6 +16,9 @@ import Header from "./components/template/Header";
 import Menu from "./components/template/Menu";
 import Content from "./components/template/Content";
 import Footer from "./components/template/Footer";
+import Loading from './components/template/Loading.vue'
+import axios from 'axios'
+import { baseUrl, userKey } from './global'
 
 export default {
 	name: "App",
@@ -23,9 +27,52 @@ export default {
 		Menu,
 		Footer,
 		Content,
+		Loading,
 	},
 
-	computed: mapState(['isMenuVisible', 'user'])
+	data: function() {
+		return {
+			validatingToken: true
+		}
+	},
+
+	computed: mapState(['isMenuVisible', 'user']),
+	methods: {
+		async validateToken() {
+
+			this.validatingToken = true
+
+			const json = localStorage.getItem(userKey)
+			const userData = JSON.parse(json)
+
+			if(!userData) {
+				this.$store.commit('setUser', null)
+				this.validatingToken = false
+				this.$router.push({ name: 'auth' })
+				return
+			}
+
+			const res = await axios.post(`${baseUrl}/login`, userData)
+
+			if (!userData) {	
+				this.$store.commit('setUser', userData)
+				
+				if(this.$mq === 'xs' || this.$mq === 'sm') {
+					this.$store.commit('toggleMenu', false)
+				}
+
+			} else {
+				localStorage.removeItem(userKey)
+				this.$router.push({ name: 'auth' })
+			}
+
+			this.validatingToken = false
+		},
+	},
+
+	created() {
+		this.validateToken()
+	}	
 };
 </script>
 
