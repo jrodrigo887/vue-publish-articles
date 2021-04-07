@@ -130,6 +130,9 @@ export default {
 			if (this.existsParent()) {
 				this.category.parentId = this.selected;
 			}
+
+			this.category.parentId = null
+
 			axios[method](`${baseUrl}/categories`, this.category)
 				.then(() => {
 					this.reset();

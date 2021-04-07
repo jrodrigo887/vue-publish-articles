@@ -52,7 +52,7 @@ export default {
 				return
 			}
 
-			const res = await axios.post(`${baseUrl}/login`, userData)
+			//const res = await axios.post(`${baseUrl}/login`, userData)
 
 			if (!userData) {	
 				this.$store.commit('setUser', userData)

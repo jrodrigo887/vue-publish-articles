@@ -1,5 +1,5 @@
 # frontend
-  Projeto de base de conhecimento em VueJS 2, projeto final do curso de Vue da CODER. O projeto conteve uma duração aproximadamente 6hr, onde foi aplicado todo conhecimento de uma aplicação no mundo real, com todos os recurso de base, a começar da autenticação á gerencimento de cadastros e afins.  
+  Projeto de base de conhecimento em VueJS 2, projeto final do curso da CODER. O projeto conteve uma duração aproximadamente 6h, onde foi aplicado todo conhecimento de uma aplicação no mundo real, com todos os recurso de base, a começar da autenticação à gerencimento de estado e cadastros afins.  
 
 ## Dependências
 > Algumas dependências utilizada no Vue 2
@@ -20,6 +20,16 @@
     "vuex": "3.0.1"
   }
 ```
+
+__Alguns conceitos aprendidos durante o curso__
+
+* Componentização (Bindig, events, mixins e etc.)
+* Reaproveitamento de código
+* Gerenciamento de Estado com Vuex
+* Rotas (Vue-Router)
+* Css FlexBox e Css Grid
+* Responsividade
+
 
 ## Project setup 
 Após clonar o projeto, baixe as dependências do projeto
@@ -47,9 +57,9 @@ npm run build
 npm run lint
 ```  
 
-# Conhecendo um pouco mais o projeto com Framework VUE
+## Conhecendo um pouco mais o projeto com Framework VUE
 
-  O projeto tem por finalidade cadastrar artigos publicados por usuários também cadastrado na plataforma. O sistema tem iteração com o usuário disponibilizando ferramentas para a elaboração de artigos. 
+  O projeto tem por finalidade cadastrar artigos e disponibilizar na web. O sistema permiti publicação de artiga apenas quem possue acesso de administrador. 
 
 
 
